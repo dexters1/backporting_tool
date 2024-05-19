@@ -154,6 +154,7 @@ if __name__ == "__main__":
     # Read arguments from command line
     args = parser.parse_args()
 
+    # Check input arguments of backporting tool
     check_input_arguments(args)
 
     # Define log file name using current time
