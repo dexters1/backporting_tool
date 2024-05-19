@@ -86,6 +86,34 @@ def apply_patch(target_file: str, diff_file: str) -> subprocess.CompletedProcess
     return result
 
 
+def check_input_arguments(arguments: argparse.Namespace):
+    """
+       Function checks input arguments of backporting tool
+
+       Args:
+           arguments: Input arguments to backporting tool
+    """
+    if not os.path.isfile(arguments.before):
+        logger.error(f"Provided input for before is not a file: {arguments.before}")
+        sys.exit(1)
+
+    if not os.path.isfile(arguments.after):
+        logger.error(f"Provided input for after is not a file: {arguments.after}")
+        sys.exit(1)
+
+    if not os.path.isfile(arguments.target):
+        logger.error(f"Provided input for target is not a file: {arguments.target}")
+        sys.exit(1)
+
+    if not os.path.isdir(arguments.log_dir):
+        logger.error(f"Provided input for log dir is not a directory: {arguments.log_dir}")
+        sys.exit(1)
+
+    if not os.path.isdir(arguments.diff_dir):
+        logger.error(f"Provided input for log dir is not a directory: {arguments.diff_dir}")
+        sys.exit(1)
+
+
 if __name__ == "__main__":
 
     # Initialize parser
@@ -106,7 +134,7 @@ if __name__ == "__main__":
     )
     parser.add_argument(
         "-d",
-        "--diff",
+        "--diff-dir",
         required=False,
         help="Directory where the diff file will be stored",
         default="/tmp/",
@@ -121,6 +149,8 @@ if __name__ == "__main__":
 
     # Read arguments from command line
     args = parser.parse_args()
+
+    check_input_arguments(args)
 
     # Define log file name using current time
     log_filename = os.path.join(
@@ -139,7 +169,7 @@ if __name__ == "__main__":
 
     # Define diff file name using current time
     diff_filename = os.path.join(
-        args.diff,
+        args.diff_dir,
         datetime.now().strftime("backporting_tool_%H_%M_%S_date_%d_%m_%Y.diff"),
     )
 
