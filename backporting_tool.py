@@ -106,11 +106,15 @@ def check_input_arguments(arguments: argparse.Namespace):
         sys.exit(1)
 
     if not os.path.isdir(arguments.log_dir):
-        logger.error(f"Provided input for log dir is not a directory: {arguments.log_dir}")
+        logger.error(
+            f"Provided input for log dir is not a directory: {arguments.log_dir}"
+        )
         sys.exit(1)
 
     if not os.path.isdir(arguments.diff_dir):
-        logger.error(f"Provided input for log dir is not a directory: {arguments.diff_dir}")
+        logger.error(
+            f"Provided input for log dir is not a directory: {arguments.diff_dir}"
+        )
         sys.exit(1)
 
 
