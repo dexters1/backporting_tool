@@ -10,7 +10,9 @@ import sys
 logger = logging.getLogger(__name__)
 
 
-def calculate_diff(before_file: str, after_file: str, diff_file: str) -> subprocess.CompletedProcess:
+def calculate_diff(
+    before_file: str, after_file: str, diff_file: str
+) -> subprocess.CompletedProcess:
     """
     Function calculates the diff between two files and stores it in a third diff file.
 
@@ -27,10 +29,12 @@ def calculate_diff(before_file: str, after_file: str, diff_file: str) -> subproc
         result: Return from subprocess call.
     """
     # Construct the command to run diff
-    command = f'diff -u {before_file} {after_file} > {diff_file}'
+    command = f"diff -u {before_file} {after_file} > {diff_file}"
 
     # Execute the command using subprocess
-    result = subprocess.run(command, stdout=subprocess.PIPE, stderr=subprocess.STDOUT, shell=True, text=True)
+    result = subprocess.run(
+        command, stdout=subprocess.PIPE, stderr=subprocess.STDOUT, shell=True, text=True
+    )
 
     # Log output of subprocess if not empty
     if result.stdout != "":
@@ -63,10 +67,12 @@ def apply_patch(target_file: str, diff_file: str) -> subprocess.CompletedProcess
         result: Return from subprocess call.
     """
     # Construct the command to run patch
-    command = f'patch  {target_file} < {diff_file}'
+    command = f"patch  {target_file} < {diff_file}"
 
     # Execute the command using subprocess
-    result = subprocess.run(command, stdout=subprocess.PIPE, stderr=subprocess.STDOUT, shell=True, text=True)
+    result = subprocess.run(
+        command, stdout=subprocess.PIPE, stderr=subprocess.STDOUT, shell=True, text=True
+    )
 
     # Log output of subprocess if not empty
     if result.stdout != "":
@@ -83,38 +89,62 @@ def apply_patch(target_file: str, diff_file: str) -> subprocess.CompletedProcess
 if __name__ == "__main__":
 
     # Initialize parser
-    parser = argparse.ArgumentParser(description='Process input arguments.')
+    parser = argparse.ArgumentParser(description="Process input arguments.")
 
     # Adding argument
-    parser.add_argument('-b', '--before', required=True, help='Location of file before the patch')
-    parser.add_argument('-a', '--after', required=True, help='Location of file after the patch')
-    parser.add_argument('-t', '--target', required=True, help='Location of file to which to apply the patch')
-    parser.add_argument('-d', '--diff', required=False, help='Directory where the diff file will be stored',
-                        default='/tmp/')
-    parser.add_argument('-l', '--log-dir', required=False, help='Directory where the log file will be stored',
-                        default='/tmp/')
+    parser.add_argument(
+        "-b", "--before", required=True, help="Location of file before the patch"
+    )
+    parser.add_argument(
+        "-a", "--after", required=True, help="Location of file after the patch"
+    )
+    parser.add_argument(
+        "-t",
+        "--target",
+        required=True,
+        help="Location of file to which to apply the patch",
+    )
+    parser.add_argument(
+        "-d",
+        "--diff",
+        required=False,
+        help="Directory where the diff file will be stored",
+        default="/tmp/",
+    )
+    parser.add_argument(
+        "-l",
+        "--log-dir",
+        required=False,
+        help="Directory where the log file will be stored",
+        default="/tmp/",
+    )
 
     # Read arguments from command line
     args = parser.parse_args()
 
     # Define log file name using current time
-    log_filename = os.path.join(args.log_dir, datetime.now().strftime('backporting_tool_%H_%M_%S_date_%d_%m_%Y.log'))
+    log_filename = os.path.join(
+        args.log_dir,
+        datetime.now().strftime("backporting_tool_%H_%M_%S_date_%d_%m_%Y.log"),
+    )
 
     # Setup logger
-    logging.basicConfig(level=logging.INFO,
-                        format='%(asctime)s - %(levelname)s - %(message)s',
-                        handlers=[logging.FileHandler(log_filename), logging.StreamHandler(sys.stdout)])
+    logging.basicConfig(
+        level=logging.INFO,
+        format="%(asctime)s - %(levelname)s - %(message)s",
+        handlers=[logging.FileHandler(log_filename), logging.StreamHandler(sys.stdout)],
+    )
 
     logger.info(f"Log file for current run stored at: {log_filename}")
 
     # Define diff file name using current time
-    diff_filename = os.path.join(args.diff, datetime.now().strftime('backporting_tool_%H_%M_%S_date_%d_%m_%Y.diff'))
+    diff_filename = os.path.join(
+        args.diff,
+        datetime.now().strftime("backporting_tool_%H_%M_%S_date_%d_%m_%Y.diff"),
+    )
 
     # Find the diff between two files
     calculate_diff(args.before, args.after, diff_filename)
 
     # Apply the diff as a patch to a third file
     apply_patch(args.target, diff_filename)
-
-
-
