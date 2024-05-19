@@ -2,7 +2,7 @@
 A small, efficient Python-based solution for backporting changes from the recently updated C file to the old one.
 
 # Requirements
-- A linux system
+- Ubuntu 20.04 or higher
 - Python 3.8 or higher
 - command line utility: diff 3.7 or higher
 - command line utility: patch 2.7.6 or higher
