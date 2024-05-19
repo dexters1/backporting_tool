@@ -1,11 +1,12 @@
 # backporting_tool
 A small, efficient Python-based solution for backporting changes from the recently updated C file to the old one.
+Wraps diff and patch command line utilities for backporting changes.
 
 # Requirements
 - Ubuntu 20.04 or higher
 - Python 3.8 or higher
-- command line utility: diff 3.7 or higher
-- command line utility: patch 2.7.6 or higher
+- Command line utility: diff 3.7 or higher
+- Command line utility: patch 2.7.6 or higher
 
 it only uses the python standard library so the requirements.txt file is empty.
 
@@ -13,7 +14,7 @@ it only uses the python standard library so the requirements.txt file is empty.
 
 - Make sure diff command line utility is on latest version: 
 ```
-sudo apt install diff
+sudo apt install diffutils
 ```
 - Make sure patch command line utility is on latest version: 
 ```
